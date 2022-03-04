@@ -49,12 +49,13 @@ public class Drawer {
         }
     }
 
-    private static void pyramidHandler(int size, int k) {
-        for (int i = 1; i <= k; i++) {
-            for (int j = 0; j < size - i; j++) {
+    private static void pyramidHandler(int size, int segmentSize) {
+        // segmentSize is used in christmastree and defines size of each segment, size is needed to center all segments
+        for (int i = 1; i <= segmentSize; i++) {
+            for (int j = 0; j < size - i; j++) { // after every iteration prints 1 less space
                 System.out.print(" ");
             }
-            for (int j = 0; j < i * 2 - 1; j++) {
+            for (int j = 0; j < i * 2 - 1; j++) { // after every iterations prints 2 more #
                 System.out.print("#");
             }
             System.out.print("\n");
