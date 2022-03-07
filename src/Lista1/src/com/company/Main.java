@@ -22,6 +22,7 @@ public class Main {
                     case "square": Drawer.drawSquare(Integer.parseInt(arguments[1])); break;
                     case "pyramid": Drawer.drawPyramid(Integer.parseInt(arguments[1])); break;
                     case "christmastree": Drawer.drawChristmasTree(Integer.parseInt(arguments[1])); break;
+                    case "rectangle": Drawer.drawRectangle(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2])); break;
                     default: System.out.println("Unknown command: " + arguments[0]);
                 }
             }

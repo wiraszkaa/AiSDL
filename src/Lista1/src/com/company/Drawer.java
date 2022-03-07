@@ -16,18 +16,30 @@ public class Drawer {
 
     public static void drawSquare(int size) {
         if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if (i == 0 || j == 0 || i == size - 1 || j == size - 1) {
-                        System.out.print("#");
-                    } else {
-                        System.out.print(" ");
-                    }
-                }
-                System.out.print("\n");
-            }
+            handleRectangle(size, size);
         } else {
             System.out.print("fail\n");
+        }
+    }
+
+    public static void drawRectangle(int width, int height) {
+        if (width > 0 && height > 0) {
+            handleRectangle(width, height);
+        } else {
+            System.out.print("fail\n");
+        }
+    }
+
+    private static void handleRectangle(int width, int height) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (i == 0 || j == 0 || i == height - 1 || j == width - 1) {
+                    System.out.print("#");
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.print("\n");
         }
     }
 
