@@ -93,7 +93,7 @@ public class OneWayLinkedList<T> implements IList<T> {
     public T removeAt(int index) throws NoSuchElementException {
         int size = size();
         if(index == size) {
-            Node<T> node = getNode(size() - 1);
+            Node<T> node = getNode(size - 1);
             T value = node.next.value;
             node.next = null;
             return value;
