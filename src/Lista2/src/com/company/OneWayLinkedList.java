@@ -37,14 +37,7 @@ public class OneWayLinkedList<T> implements IList<T> {
 
     @Override
     public boolean contains(T value) {
-        Node<T> curr = head.next;
-        while(curr.next != null) {
-            if(curr.value.equals(value)) {
-                return true;
-            }
-            curr = curr.next;
-        }
-        return false;
+        return indexOf(value) >= 0;
     }
 
     @Override

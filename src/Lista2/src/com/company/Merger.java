@@ -26,9 +26,8 @@ public class Merger {
 //            temp.add(i);
 //        }
 //        for(int i: list2) {
-//            if(!list1.contains(i)) {
-//                temp.add(i);
-//            }
+//               temp.add(i);
+//
 //        }
 //        OneWayLinkedList<Integer> result = new OneWayLinkedList<>();
 //        while(!temp.isEmpty()) {
