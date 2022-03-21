@@ -31,6 +31,7 @@ public class TwoWayLinkedList<T> implements IList<T> {
             head.next = newElement;
         } else if (index == size) {
             add(value);
+            return;
         } else if(index > 0 && index < size) {
             Element<T> prevElement = getElement(index - 1);
             Element<T> nextElement = prevElement.next;

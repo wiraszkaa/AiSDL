@@ -3,6 +3,7 @@ package Lista3.src.com.company;
 import java.util.NoSuchElementException;
 
 public class Inserter {
+
     public static TwoWayLinkedList<String> insert(
             TwoWayLinkedList<String> list1,
             TwoWayLinkedList<String> list2,
@@ -11,14 +12,16 @@ public class Inserter {
             throw new NoSuchElementException();
         }
         TwoWayLinkedList<String> result = new TwoWayLinkedList<>();
-        for (int i = 0; i < list1.size(); i++) {
-            if(i == beforeIndex) {
-                for(String j: list2) {
-                    result.add(j);
-                }
-            }
+        for (int i = 0; i < beforeIndex; i++) {
             result.add(list1.get(i));
         }
+        for(String i: list2) {
+            result.add(i);
+        }
+        for(int i = beforeIndex; i < list1.size(); i++) {
+            result.add(list1.get(i));
+        }
+
         return result;
     }
 
@@ -26,19 +29,10 @@ public class Inserter {
             TwoWayLinkedList<String> list1,
             TwoWayLinkedList<String> list2,
             String beforeElement) throws NoSuchElementException {
-        if(!list1.contains(beforeElement)) {
+        int beforeIndex = list1.indexOf(beforeElement);
+        if(beforeIndex < 0) {
             throw new NoSuchElementException();
         }
-        TwoWayLinkedList<String> result = new TwoWayLinkedList<>();
-        for (int i = 0; i < list1.size(); i++) {
-            String element = list1.get(i);
-            if(element.equals(beforeElement)) {
-                for(String j: list2) {
-                    result.add(j);
-                }
-            }
-            result.add(element);
-        }
-        return result;
+        return insert(list1, list2, beforeIndex);
     }
 }
