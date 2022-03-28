@@ -63,7 +63,7 @@ public class TwoWayLinkedListQueue<T> implements IQueue<T> {
 
     @Override
     public int size() {
-        return size;
+        return capacity;
     }
 
     private class Element<T> {

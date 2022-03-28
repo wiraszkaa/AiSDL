@@ -57,6 +57,6 @@ public class ArrayStack<T> implements IStack<T>{
 
     @Override
     public int size() {
-        return topIndex + 1;
+        return this.capacity;
     }
 }
