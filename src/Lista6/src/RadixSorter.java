@@ -2,7 +2,6 @@ package Lista6.src;
 
 
 import java.util.Arrays;
-import java.util.Collections;
 
 public class RadixSorter implements ISorter {
     private final IChecker checker;
@@ -20,12 +19,26 @@ public class RadixSorter implements ISorter {
         }
     }
 
+//    private int getDigits(int[] values) {
+//        int max = Integer.MIN_VALUE;
+//        for(int i: values) {
+//           max = Math.max(max, i);
+//        }
+//        return String.valueOf(max).length();
+//    }
+
     private int getDigits(int[] values) {
         int max = Integer.MIN_VALUE;
         for(int i: values) {
-           max = Math.max(max, i);
+            max = Math.max(max, i);
         }
-        return String.valueOf(max).split("").length;
+        int length = 0;
+        int temp = 1;
+        while(temp < max) {
+            length++;
+            temp *= 10;
+        }
+        return length;
     }
 
     private void sortByDigit(int[] values, int digit) {
@@ -40,8 +53,9 @@ public class RadixSorter implements ISorter {
         }
         int[] result = new int[values.length];
         for (int i = values.length - 1; i >= 0; i--) {
-            result[countedDigits[values[i] / divider % 10] - 1] = values[i];
-            countedDigits[values[i] / divider % 10]--;
+            int temp = values[i] / divider % 10;
+            result[countedDigits[temp] - 1] = values[i];
+            countedDigits[temp]--;
         }
         System.arraycopy(result, 0, values, 0, result.length);
     }
