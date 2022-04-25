@@ -1,8 +1,5 @@
 package Lista7.src;
 
-import org.junit.platform.engine.support.hierarchical.Node;
-
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
@@ -16,11 +13,6 @@ public class HashMap<TKey, TValue> {
     private Node<TKey, TValue>[] array;
 
     public HashMap(int initialSize, double loadFactor, Function<TKey, Integer> hashFunction) {
-        // TODO: Zainicjuj nową instancję klasy HashMap według podanych parametrów.
-        //    InitialSize - początkowy rozmiar HashMap
-        //    LoadFactor - stosunek elementów do rozmiaru HashMap po przekroczeniu którego należy podwoić rozmiar HashMap.
-        //    HashFunction - funkcja, według której liczony jest hash klucza.
-        //       Przykład użycia:   int hash = hashFunction.apply(key);
         this.size = initialSize;
         this.elements = 0;
         this.maxLoadFactor = loadFactor;
@@ -32,7 +24,7 @@ public class HashMap<TKey, TValue> {
         createEmptyArray(this.array);
     }
 
-    private void createEmptyArray(Node[] array) {
+    private void createEmptyArray(Node<TKey, TValue>[] array) {
         for(int i = 0; i < array.length; i++) {
             Node<TKey, TValue> head = new Node<>(null, null, null, null);
             head.prev= head;
@@ -41,17 +33,16 @@ public class HashMap<TKey, TValue> {
     }
 
     public void add(TKey key, TValue value) throws DuplicateKeyException {
-        // TODO: Dodaj nową parę klucz-wartość. Rzuć wyjątek DuplicateKeyException, jeżeli dany klucz już istnieje w HashMap.
         if(containsKey(key)) {
            throw new DuplicateKeyException();
         } else {
             elements++;
             checkLoadFactor();
-            handleAdd(key, value);
+            handleAdd(key, value, array);
         }
     }
 
-    private void handleAdd(TKey key, TValue value) {
+    private void handleAdd(TKey key, TValue value, Node[] array) {
         Node<TKey, TValue> node = array[getIndex(key)];
         Node<TKey, TValue> newNode = new Node<>(key, value, node.prev, null);
         node.prev.next = newNode;
@@ -59,13 +50,11 @@ public class HashMap<TKey, TValue> {
     }
 
     public void clear() {
-        // TODO: Wyczyść zawartość HashMap.
         createEmptyArray(this.array);
         elements = 0;
     }
 
     public boolean containsKey(TKey key) {
-        // TODO: Sprawdź, czy HashMap zawiera już dany klucz.
         Node<TKey, TValue> curr = array[getIndex(key)].next;
         while(curr != null) {
             if(curr.key.equals(key)) {
@@ -77,7 +66,6 @@ public class HashMap<TKey, TValue> {
     }
 
     public boolean containsValue(TValue value) {
-        // TODO: Sprawdź, czy HashMap zawiera już daną wartość.
         for(Node<TKey, TValue> i: array) {
             Node<TKey, TValue> curr = i.next;
             while (curr != null) {
@@ -91,12 +79,10 @@ public class HashMap<TKey, TValue> {
     }
 
     public int elements() {
-        // TODO: Zwróć liczbę par klucz-wartość przechowywaną w HashMap.
         return elements;
     }
 
     public TValue get(TKey key) throws NoSuchElementException {
-        // TODO: Pobierz wartość powiązaną z danym kluczem. Rzuć wyjątek NoSuchElementException, jeżeli dany klucz nie istnieje.
         Node<TKey, TValue> node = getNode(key);
         if(node != null) {
             return node.value;
@@ -116,9 +102,6 @@ public class HashMap<TKey, TValue> {
     }
 
     public void put(TKey key, TValue value) {
-        // TODO: Przypisz daną wartość do danego klucza.
-        //   Jeżeli dany klucz już istnieje, nadpisz przypisaną do niego wartość.
-        //   Jeżeli dany klucz nie istnieje, dodaj nową parę klucz-wartość.
         Node<TKey, TValue> curr = array[getIndex(key)].next;
         while(curr != null) {
             if(curr.key.equals(key)) {
@@ -135,7 +118,6 @@ public class HashMap<TKey, TValue> {
     }
 
     public TValue remove(TKey key) {
-        // TODO: Usuń parę klucz-wartość, której klucz jest równy podanej wartości.
         Node<TKey, TValue> node = getNode(key);
         if(node != null) {
             TValue value = node.value;
@@ -150,7 +132,6 @@ public class HashMap<TKey, TValue> {
     }
 
     public int size() {
-        // TODO: Zwróć obecny rozmiar HashMap.
         return size;
     }
 
@@ -174,6 +155,20 @@ public class HashMap<TKey, TValue> {
             }
             this.array = newArray;
         }
+    }
+
+    public void rehash(Function<TKey, Integer> newHashFunction) {
+        this.hashFunction = newHashFunction;
+        Node<TKey, TValue>[] newArray = new Node[size];
+        createEmptyArray(newArray);
+        for(Node i: array) {
+            Node<TKey, TValue> curr = i.next;
+            while(curr != null) {
+                handleAdd(curr.key, curr.value, newArray);
+                curr = curr.next;
+            }
+        }
+        array = newArray;
     }
 
     private class Node<TKey, TValue> {
