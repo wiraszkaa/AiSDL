@@ -42,7 +42,7 @@ public class HashMap<TKey, TValue> {
         }
     }
 
-    private void handleAdd(TKey key, TValue value, Node[] array) {
+    private void handleAdd(TKey key, TValue value, Node<TKey, TValue>[] array) {
         Node<TKey, TValue> node = array[getIndex(key)];
         Node<TKey, TValue> newNode = new Node<>(key, value, node.prev, null);
         node.prev.next = newNode;
@@ -55,14 +55,8 @@ public class HashMap<TKey, TValue> {
     }
 
     public boolean containsKey(TKey key) {
-        Node<TKey, TValue> curr = array[getIndex(key)].next;
-        while(curr != null) {
-            if(curr.key.equals(key)) {
-                return true;
-            }
-            curr = curr.next;
-        }
-        return false;
+        Node<TKey, TValue> node = getNode(key);
+        return node != null;
     }
 
     public boolean containsValue(TValue value) {
@@ -102,13 +96,9 @@ public class HashMap<TKey, TValue> {
     }
 
     public void put(TKey key, TValue value) {
-        Node<TKey, TValue> curr = array[getIndex(key)].next;
-        while(curr != null) {
-            if(curr.key.equals(key)) {
-                curr.value = value;
-                return;
-            }
-            curr = curr.next;
+        Node<TKey, TValue> node = getNode(key);
+        if(node != null) {
+            node.value = value;
         }
         try {
             add(key, value);
@@ -140,35 +130,30 @@ public class HashMap<TKey, TValue> {
     }
 
     private void checkLoadFactor() {
-        loadFactor = (double) elements() / size;
+        loadFactor = (double) elements / size;
 
         if(loadFactor >= maxLoadFactor) {
             size *= 2;
-            Node<TKey, TValue>[] newArray = new Node[size];
-            createEmptyArray(newArray);
-            for(Node<TKey, TValue> i: array) {
-                if(i.next != null) {
-                    Node<TKey, TValue> node = newArray[getIndex(i.next.key)];
-                    node.next = i.next;
-                    node.prev = i.prev;
-                }
-            }
-            this.array = newArray;
+            handleArrayCopy();
         }
     }
 
     public void rehash(Function<TKey, Integer> newHashFunction) {
         this.hashFunction = newHashFunction;
+        handleArrayCopy();
+    }
+
+    private void handleArrayCopy() {
         Node<TKey, TValue>[] newArray = new Node[size];
         createEmptyArray(newArray);
-        for(Node i: array) {
+        for (Node<TKey, TValue> i : array) {
             Node<TKey, TValue> curr = i.next;
-            while(curr != null) {
+            while (curr != null) {
                 handleAdd(curr.key, curr.value, newArray);
                 curr = curr.next;
             }
         }
-        array = newArray;
+        this.array = newArray;
     }
 
     private class Node<TKey, TValue> {
