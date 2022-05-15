@@ -6,8 +6,9 @@ public class DisjointSetLinkedList implements IDisjointSetStructure {
     public DisjointSetLinkedList(int size) {
         array = new Element[size];
         for (int i = 0; i < array.length; i++) {
-            array[i] = new Element(i, -1);
-            array[i].last = i;
+            Element element = new Element(i);
+            array[i] = element;
+            element.last = element;
         }
     }
 
@@ -33,31 +34,31 @@ public class DisjointSetLinkedList implements IDisjointSetStructure {
         }
         array[rep1].length += array[rep2].length;
 
-        Element repElement = array[rep1];
-        int curr = rep2;
+        repHandler(array[rep1], rep2);
+    }
 
-        array[repElement.last].next = curr;
+    private void repHandler(Element repElement, int start) {
+        Element curr = array[start];
 
-        int prev = curr;
-        while (curr != -1) {
-            array[curr].rep = repElement.rep;
+        repElement.last.next = curr;
+        repElement.last = curr.last;
 
-            prev = curr;
-            curr = array[curr].next;
+        while (curr != null) {
+            curr.rep = repElement.rep;
+
+            curr = curr.next;
         }
-        repElement.last = prev;
     }
 
     private class Element {
         int rep;
-        int next;
+        Element next;
 
-        int last;
+        Element last;
         int length;
 
-        public Element(int rep, int next) {
+        public Element(int rep) {
             this.rep = rep;
-            this.next = next;
 
             length = 1;
         }
