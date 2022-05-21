@@ -1,45 +1,43 @@
 package Lista9.src;
 
 public class DisjointSetLinkedList implements IDisjointSetStructure {
-    Element[] array;
+    Element[] sets;
 
     public DisjointSetLinkedList(int size) {
-        array = new Element[size];
-        for (int i = 0; i < array.length; i++) {
+        sets = new Element[size];
+        for (int i = 0; i < sets.length; i++) {
             Element element = new Element(i);
-            array[i] = element;
+            sets[i] = element;
             element.last = element;
         }
     }
 
     @Override
     public int findSet(int item) throws ItemOutOfRangeException {
-        if (item < 0 || item >= array.length) {
+        if (!DisjointSetForest.checkInBounds(item, sets.length)) {
             throw new ItemOutOfRangeException();
         }
-        return array[item].rep;
+        return sets[item].rep;
     }
 
     @Override
     public void union(int item1, int item2) throws ItemOutOfRangeException {
-        if (item1 < 0 || item1 >= array.length || item2 < 0 || item2 >= array.length) {
+        if (!DisjointSetForest.checkInBounds(item1, item2, sets.length)) {
             throw new ItemOutOfRangeException();
         }
-        int rep1 = findSet(item1);
-        int rep2 = findSet(item2);
-        if(array[rep1].length < array[rep2].length) {
-            int temp = rep1;
+        Element rep1 = sets[findSet(item1)];
+        Element rep2 = sets[findSet(item2)];
+        if(rep1.length < rep2.length) {
+            Element temp = rep1;
             rep1 = rep2;
             rep2 = temp;
         }
-        array[rep1].length += array[rep2].length;
+        rep1.length += rep2.length;
 
-        repHandler(array[rep1], rep2);
+        repHandler(rep1, rep2);
     }
 
-    private void repHandler(Element repElement, int start) {
-        Element curr = array[start];
-
+    private void repHandler(Element repElement, Element curr) {
         repElement.last.next = curr;
         repElement.last = curr.last;
 
@@ -50,10 +48,9 @@ public class DisjointSetLinkedList implements IDisjointSetStructure {
         }
     }
 
-    private class Element {
+    private static class Element {
         int rep;
         Element next;
-
         Element last;
         int length;
 
