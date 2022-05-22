@@ -1,5 +1,8 @@
 package Lista10.src;
 
+import Lista9.src.DisjointSetForest;
+import Lista9.src.ItemOutOfRangeException;
+
 import java.util.*;
 
 public class Graph<T> {
@@ -7,6 +10,8 @@ public class Graph<T> {
     private HashMap<T, Boolean> nodesVisited;
     private int nodesAmount;
     private Edge<T>[][] neighboursMatrix;
+
+    private final DisjointSetForest connectedElements;
 
     public Graph(List<Edge<T>> edges) {
         dictionary = new HashMap<>();
@@ -20,6 +25,7 @@ public class Graph<T> {
             handleFullMatrix();
             neighboursMatrix[getIndex(source)][getIndex(destination)] = edge;
         }
+        connectedElements = new DisjointSetForest(nodesAmount);
     }
 
     private void addNode(T node) {
@@ -122,6 +128,7 @@ public class Graph<T> {
             if (edge != null) {
                 if (!isVisited(edge.getDestination())) {
                     neighbours.add(edge);
+//                    result.add(edge.getDestination());
                 }
             }
         }
@@ -133,8 +140,27 @@ public class Graph<T> {
     }
 
     public int connectedComponents() {
-        // TODO: Liczba składowych spójnych grafu
-        return -1;
+        for(int i = 0; i < nodesAmount; i++) {
+            for(int j = 0; j < nodesAmount; j++) {
+                Edge<T> edge = neighboursMatrix[i][j];
+                if(edge != null) {
+                    handleConnectedElements(edge.getSource(), edge.getDestination());
+                }
+            }
+        }
+        return connectedElements.getAmount();
+    }
+
+    private void handleConnectedElements(T source, T destination) {
+        int sourceIndex = getIndex(source);
+        int destinationIndex = getIndex(destination);
+        try {
+            if (connectedElements.findSet(sourceIndex) != connectedElements.findSet(destinationIndex)) {
+                connectedElements.union(sourceIndex, destinationIndex);
+            }
+        } catch (ItemOutOfRangeException ignored) {
+
+        }
     }
 
     private String listToString(List<T> nodes) {

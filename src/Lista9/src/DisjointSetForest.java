@@ -2,9 +2,11 @@ package Lista9.src;
 
 public class DisjointSetForest implements IDisjointSetStructure {
     private final Element[] sets;
+    private int amount;
 
     public DisjointSetForest(int size) {
         sets = new Element[size];
+        amount = size;
         for (int i = 0; i < sets.length; i++) {
             sets[i] = new Element(i);
         }
@@ -41,6 +43,20 @@ public class DisjointSetForest implements IDisjointSetStructure {
             sets[item1].rank++;
         }
         sets[findSet(item1)].par = findSet(item2);
+
+        amount--;
+    }
+
+    public static boolean checkInBounds(int index, int length) {
+        return index < length && index >= 0;
+    }
+
+    public static boolean checkInBounds(int index1, int index2, int length) {
+        return checkInBounds(index1, length) && checkInBounds(index2, length);
+    }
+
+    public int getAmount() {
+        return this.amount;
     }
 
     private static class Element {
@@ -52,13 +68,5 @@ public class DisjointSetForest implements IDisjointSetStructure {
 
             rank = 0;
         }
-    }
-
-    public static boolean checkInBounds(int index, int length) {
-        return index < length && index >= 0;
-    }
-
-    public static boolean checkInBounds(int index1, int index2, int length) {
-        return checkInBounds(index1, length) && checkInBounds(index2, length);
     }
 }
