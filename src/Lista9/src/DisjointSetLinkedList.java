@@ -27,10 +27,11 @@ public class DisjointSetLinkedList implements IDisjointSetStructure {
         }
         Element rep1 = sets[findSet(item1)];
         Element rep2 = sets[findSet(item2)];
-        if(rep1.length < rep2.length) {
-            Element temp = rep1;
-            rep1 = rep2;
-            rep2 = temp;
+        if (rep1.length < rep2.length) {
+//            Element temp = rep1;
+//            rep1 = rep2;
+//            rep2 = temp;
+            rep1 = DisjointSetForest.swap(rep2, rep2 = rep1);
         }
         rep1.length += rep2.length;
 

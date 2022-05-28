@@ -124,17 +124,18 @@ public class Graph<T> {
         TreeSet<Edge<T>> neighbours = new TreeSet<>(new EdgesComparator());
         List<T> result = new LinkedList<>();
 
-        for (Edge<T> edge : neighboursMatrix[getIndex(node)]) {
+        for (int i = 0; i < nodesAmount; i++) {
+            Edge<T> edge = neighboursMatrix[getIndex(node)][i];
             if (edge != null) {
                 if (!isVisited(edge.getDestination())) {
                     neighbours.add(edge);
-//                    result.add(edge.getDestination());
+                    result.add(edge.getDestination());
                 }
             }
         }
-        for (Edge<T> edge : neighbours) {
-            result.add(edge.getDestination());
-        }
+//        for (Edge<T> edge : neighbours) {
+//            result.add(edge.getDestination());
+//        }
 
         return result;
     }

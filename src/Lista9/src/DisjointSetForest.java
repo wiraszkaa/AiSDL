@@ -36,9 +36,10 @@ public class DisjointSetForest implements IDisjointSetStructure {
             throw new ItemOutOfRangeException();
         }
         if (sets[item1].rank < sets[item2].rank) {
-            int temp = item1;
-            item1 = item2;
-            item2 = temp;
+//            int temp = item1;
+//            item1 = item2;
+//            item2 = temp;
+            item1 = swap(item2, item2 = item1);
         } else if (sets[item1].rank == sets[item2].rank) {
             sets[item1].rank++;
         }
@@ -57,6 +58,11 @@ public class DisjointSetForest implements IDisjointSetStructure {
 
     public int getAmount() {
         return this.amount;
+    }
+
+    @SafeVarargs
+    public static <T> T swap(T... args) {
+        return args[0];
     }
 
     private static class Element {
