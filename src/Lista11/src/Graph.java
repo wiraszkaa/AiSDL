@@ -60,8 +60,17 @@ public class Graph<T> {
     }
 
     public Map<T, Integer> calculateShortestPaths(T startNode) throws NoSuchElementException {
+        return calculateShortestPathsHandler(startNode, null);
+    }
+
+    public Map<T, Integer> calculateShortestPathsHandler(T startNode, T endNode) {
         if (getIndex(startNode) == -1) {
             throw new NoSuchElementException();
+        }
+        if(endNode != null) {
+            if (getIndex(endNode) == -1) {
+                throw new NoSuchElementException();
+            }
         }
 
         Map<T, Integer> result = new HashMap<>();
@@ -82,7 +91,9 @@ public class Graph<T> {
                         int neighbourIndex = getIndex(node.node);
                         int distance = node.distance + distances[currentNodeIndex];
                         if (distance < distances[neighbourIndex]) {
-                            nodesToCheck.remove(node.node);
+                            if (distances[neighbourIndex] != Integer.MAX_VALUE) {
+                                nodesToCheck.remove(node.node);
+                            }
                             distances[neighbourIndex] = distance;
                         }
                     }
@@ -93,14 +104,20 @@ public class Graph<T> {
                     }
                 }
             }
-
             currentNode = nodesToCheck.first();
             result.put(currentNode, distances[getIndex(currentNode)]);
             nodesToCheck.remove(currentNode);
+            if (currentNode == endNode) {
+                break;
+            }
         }
         result.remove(startNode);
 
         return result;
+    }
+
+    public Integer calculateShortestPath(T startNode, T endNode) throws NoSuchElementException {
+        return calculateShortestPathsHandler(startNode, endNode).get(endNode);
     }
 
     private static class Node<T> {

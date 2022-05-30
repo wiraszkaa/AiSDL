@@ -227,4 +227,36 @@ public class GraphTests {
             this.name = name;
         }
     }
+
+    @Test
+    public void calculateShortestPath_af() {
+        var distance = graph.calculateShortestPath("a", "f");
+        assertEquals(6, distance);
+    }
+
+    @Test
+    public void calculateShortestPath_df() {
+        var distance = graph.calculateShortestPath("d", "f");
+        assertEquals(1, distance);
+    }
+
+    @Test
+    public void calculateShortestPath_gc() {
+        var distance = graph.calculateShortestPath("g", "c");
+        assertEquals(11, distance);
+    }
+
+    @Test
+    public void calculateShortestPath_startNodeDoesntExist() {
+        assertThrows(NoSuchElementException.class, () -> {
+            graph.calculateShortestPath("z", "c");
+        });
+    }
+
+    @Test
+    public void calculateShortestPath_endNodeDoesntExist() {
+        assertThrows(NoSuchElementException.class, () -> {
+            graph.calculateShortestPath("a", "x");
+        });
+    }
 }
