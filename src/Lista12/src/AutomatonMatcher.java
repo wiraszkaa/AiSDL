@@ -12,7 +12,6 @@ public class AutomatonMatcher implements IStringMatcher {
     @Override
     public List<Integer> validShifts(String textToSearch, String patternToFind) {
         List<Integer> patternIndexes = new LinkedList<>();
-        // TODO: Zaimplementuj algorytm dopasowywania napisów oparty na automacie skończonym
         char[] textArray = textToSearch.toCharArray();
         char[] patternArray = patternToFind.toCharArray();
         createTransitionFunction(patternToFind, getUniqueCharacters(textToSearch + patternToFind));
