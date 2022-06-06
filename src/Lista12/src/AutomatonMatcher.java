@@ -13,20 +13,19 @@ public class AutomatonMatcher implements IStringMatcher {
     public List<Integer> validShifts(String textToSearch, String patternToFind) {
         List<Integer> patternIndexes = new LinkedList<>();
         char[] textArray = textToSearch.toCharArray();
-        char[] patternArray = patternToFind.toCharArray();
-        createTransitionFunction(patternToFind, getUniqueCharacters(textToSearch + patternToFind));
+        int length = patternToFind.length();
+        createTransitionFunction(patternToFind, getUniqueCharacters(textToSearch + patternToFind), length);
         int q = 0;
         for (int i = 0; i < textArray.length; i++) {
              q = transitionFunction.get(q).get(textArray[i]);
-            if (q == patternArray.length) {
-                patternIndexes.add(i - patternArray.length + 1);
+            if (q == length) {
+                patternIndexes.add(i - length + 1);
             }
         }
         return patternIndexes;
     }
 
-    private void createTransitionFunction(String patternToFind, Set<Character> alphabet) {
-        int length = patternToFind.length();
+    private void createTransitionFunction(String patternToFind, Set<Character> alphabet, int length) {
         buildTransitionMap(length);
 
         for (int q = 0; q <= length; q++) {
