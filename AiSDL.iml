@@ -33,5 +33,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="java" level="project" />
+    <orderEntry type="library" name="jfreechart-1.5.0" level="project" />
+    <orderEntry type="library" name="python.jython.slim" level="project" />
   </component>
 </module>
