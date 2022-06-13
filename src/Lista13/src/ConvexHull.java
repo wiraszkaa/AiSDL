@@ -11,8 +11,9 @@ public class ConvexHull {
         }
 
         Point start = getBottommostPoint(points);
-        points.sort(new PolarPointComparator(start));
-        points = removeCollinear(points, start);
+        List<Point> sortedPoints = new LinkedList<>(points);
+        sortedPoints.sort(new PolarPointComparator(start));
+        points = removeCollinear(sortedPoints, start);
 
         if (points.size() < 3) {
             throw new IllegalArgumentException();
@@ -24,7 +25,7 @@ public class ConvexHull {
         }
 
         for (int i = 3; i < points.size(); i++) {
-            while(orientation(pointStack.nextToTop(), pointStack.top(), points.get(i)) != -1) {
+            while(orientation(pointStack.nextToTop(), pointStack.top(), points.get(i)) >= 0) {
                 pointStack.pop();
             }
             pointStack.push(points.get(i));
@@ -36,13 +37,19 @@ public class ConvexHull {
     }
 
     private static int orientation(Point p, Point q, Point r) {
-        int value = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+        return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y); // clock or counterclock wise
+    }
 
-        if (value == 0) {
+    private static int orientationMatrix(Point p, Point q, Point r) {
+        int addValue = p.x * q.y + p.y * r.x + q.x * r.y;
+        int subValue = p.y * q.x + p.x * r.y + q.y * r.x;
+        int result = addValue - subValue;
+
+        if (result == 0) {
             return 0; // collinear
         }
 
-        return (value > 0) ? 1 : -1; // clock or counterclock wise
+        return (result > 0) ? -1 : 1; // counterclock or clock wise
     }
 
     private static Point getBottommostPoint(List<Point> points) {
@@ -72,7 +79,6 @@ public class ConvexHull {
     }
 
     private record PolarPointComparator(Point startingPoint) implements Comparator<Point> {
-
         @Override
         public int compare(Point o1, Point o2) {
             int orientation = orientation(startingPoint, o1, o2);
